@@ -1,0 +1,69 @@
+class Producer(Thread)
+
+The run method of producers represents a continuos loop that 
+first of all register the new producer in the markeplace and 
+starts the production process.
+For every product in his list it will try to publish it in the 
+marketplace, if there are too much products in queue for the 
+current producer then wait until someone takes a product. If the 
+product was published succesfully then wait until publishing the next 
+product
+
+class Consumer(Thread)
+
+The run method will register the new carts to the marketplace and 
+start the procedures from the input file. When trying to add a product
+to the cart but the prodcut was not found the wait and try again.
+If the procedure is remove then just remove the product from the cart.
+After all the procedures place the order to the marketplace and print 
+what products were bought. A lock was used when printing to prevent 
+printing overlap
+
+class Marketplace
+
+In this class dictionaries were used to store the published products and 
+the carts' contents.
+Also for publishing, adding a product to a cart,
+registering new producers and new carts locks were used for safe thread 
+operations.
+A logger file was formatted to keep track of the markeplace methods inputs
+and outputs.
+
+    def register_producer(self)
+
+    Registers a new producer through giving him a new id equal to the 
+    number of already registered producers. Also expands the producers
+    dictionary
+
+
+    def publish(self, producer_id, product)
+    
+    Adds a new available for purchasing product to the dictionary if the 
+    number of products for the respective producer isn't exceeding the 
+    queue_size_per_producer value.
+
+
+    def new_cart(self)
+
+    Register a new cart to the marketplace through giving him a new id equal 
+    to the number of already registered producers. Also expands the carts
+    dictionary
+
+
+    def add_to_cart(self, cart_id, product)
+
+    Look for the product in the producers dictionary and add
+    the product to the cart with the given id if the product was found.
+    Also remove the product from the respective producer dictionary
+    Return True if added succesfully, False otherwise
+
+
+    def remove_from_cart(self, cart_id, product)
+
+    Analogical to add_to_cart method, but for removing from the cart.
+    Doesn't return anything
+
+
+    def place_order(self, cart_id)
+
+    Return a list with all the products in the cart.
